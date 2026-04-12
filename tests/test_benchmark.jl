@@ -1,8 +1,9 @@
-# # tests/test_benchmark.jl
 # include("../src/main.jl")
 # using Statistics, Printf
 
-# # Hàm hỗ trợ cắt file để làm thực nghiệm Scalability
+# # =========================
+# # Slice dataset (scalability)
+# # =========================
 # function slice_dataset(input_path, output_path, percentage)
 #     lines = readlines(input_path)
 #     n = Int(floor(length(lines) * percentage / 100))
@@ -13,395 +14,197 @@
 #     end
 # end
 
-# # Hàm đo thời gian chạy của SPMF (Java)
+# # =========================
+# # SPMF benchmark
+# # =========================
 # function measure_spmf(input_path, minsup)
 #     output_path = "temp_spmf.txt"
-#     # Dùng @elapsed để đo thời gian thực thi lệnh shell
-#     time_sec = @elapsed begin
+#     # Xóa file cũ nếu có để đảm bảo tính đúng đắn
+#     isfile(output_path) && rm(output_path)
+
+#     time_ms = @elapsed begin
+#         # Chạy lệnh java
 #         cmd = `java -jar data/spmf.jar run HMine $input_path $output_path $(minsup)%`
-#         run(pipeline(cmd, devnull)) # devnull để không hiện log Java làm rối terminal
+#         run(pipeline(cmd, devnull))
 #     end
-#     return time_sec * 1000 # Trả về miliseconds
+
+#     return time_ms * 1000
 # end
 
-# function run_full_benchmarks()
-#     # Kiểm tra thư mục docs
-#     if !isdir("docs") mkpath("docs") end
-
-#     # 1. Cấu hình minsup cho thực nghiệm (b), (c), (d)
-#     experiment_configs = Dict(
-#         "mushrooms.txt" => [60, 55, 50, 45, 40],
-#         "accidents.txt" => [90, 85, 80, 75, 70],
-#         "retail.txt"    => [5, 2, 1, 0.5, 0.2],
-#         "T10I4D100K.txt" => [10, 5, 2, 1, 0.5]
-#     )
-
-#     println(">>> Đang chạy Benchmark trên các tập dữ liệu...")
-#     open("docs/benchmark_results.csv", "w") do io
-#         println(io, "Dataset,Minsup,Version,Time_ms,Memory_MB,ItemsetCount")
-
-#         for (fname, msups) in experiment_configs
-#             path = "data/benchmark/" * fname
-#             println("\nDataset: $fname")
-#             for m in msups
-#                 print("  Minsup $m%: ")
-                
-#                 # --- Đo bản Gốc ---
-#                 stats_b = @timed run_hmine(path, m, "temp.txt", optimized=false)
-#                 println(io, "$fname,$m,Base,$(stats_b.time*1000),$(stats_b.bytes/1024^2),$(countlines("temp.txt"))")
-                
-#                 # --- Đo bản Tối ưu ---
-#                 stats_o = @timed run_hmine(path, m, "temp.txt", optimized=true)
-#                 println(io, "$fname,$m,Optimized,$(stats_o.time*1000),$(stats_o.bytes/1024^2),$(countlines("temp.txt"))")
-                
-#                 # --- Đo SPMF ---
-#                 time_spmf = measure_spmf(path, m)
-#                 println(io, "$fname,$m,SPMF,$time_spmf,0,0") # SPMF không đo RAM dễ dàng như Julia nên để 0
-                
-#                 println("Done (Base: $(round(stats_b.time*1000))ms, Opt: $(round(stats_o.time*1000))ms, SPMF: $(round(time_spmf))ms)")
-#             end
-#         end
-#     end
-
-#     # 2. Thực nghiệm Scalability (Khả năng mở rộng)
-#     println("\n>>> Đang chạy thực nghiệm Scalability trên Accidents.txt...")
-#     percentages = [10, 25, 50, 75, 100]
-#     fixed_minsup = 80 
-    
-#     open("docs/scalability_results.csv", "w") do io
-#         println(io, "Percentage,Size_lines,Time_ms")
-#         for p in percentages
-#             temp_path = "data/benchmark/accidents_$(p)pct.txt"
-#             slice_dataset("data/benchmark/accidents.txt", temp_path, p)
-            
-#             stats = @timed run_hmine(temp_path, fixed_minsup, "temp.txt", optimized=true)
-#             println(io, "$p,$(countlines(temp_path)),$(stats.time*1000)")
-#             println("  Kích thước $p%: $(round(stats.time*1000))ms")
-#             rm(temp_path) 
-#         end
-#     end
-#     println("\n>>> TẤT CẢ THỰC NGHIỆM ĐÃ HOÀN TẤT. Dữ liệu lưu tại thư mục docs/")
-# end
-
-# run_full_benchmarks()
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # tests/test_benchmark.jl
-# include("../src/main.jl")
-# using Statistics, Printf
-
-# # Hàm hỗ trợ cắt file để làm thực nghiệm Scalability
-# function slice_dataset(input_path, output_path, percentage)
-#     lines = readlines(input_path)
-#     n = Int(floor(length(lines) * percentage / 100))
-#     open(output_path, "w") do f
-#         for i in 1:n
-#             println(f, lines[i])
-#         end
-#     end
-# end
-
-# # Hàm đo thời gian chạy của SPMF (Java)
-# function measure_spmf(input_path, minsup)
-#     output_path = "temp_spmf.txt"
-#     time_sec = @elapsed begin
-#         cmd = `java -jar data/spmf.jar run HMine $input_path $output_path $(minsup)%`
-#         run(pipeline(cmd, devnull)) 
-#     end
-#     return time_sec * 1000 
-# end
-
-# # --- HÀM MỚI: Đo Peak RAM bằng cách Polling (Lấy mẫu liên tục) ---
-# function measure_peak_ram(func)
-#     GC.gc() # Ép dọn rác trước khi đo để có baseline sạch
-#     baseline = Base.gc_live_bytes() # RAM đang dùng trước khi chạy
-    
-#     done = Threads.Atomic{Bool}(false)
-#     peak_mem = Threads.Atomic{UInt64}(0)
-    
-#     # Khởi tạo Task giám sát RAM chạy song song
-#     monitor_task = Threads.@spawn begin
-#         while !done[]
-#             current_mem = Base.gc_live_bytes()
-#             if current_mem > peak_mem[]
-#                 peak_mem[] = current_mem
-#             end
-#             sleep(0.005) # Lấy mẫu mỗi 5ms để không ăn quá nhiều CPU
-#         end
-#     end
-    
-#     # Chạy thuật toán chính
-#     func()
-    
-#     # Dừng giám sát
-#     done[] = true
-#     wait(monitor_task)
-    
-#     # Tính Peak RAM (Dung lượng đỉnh - Baseline ban đầu)
-#     peak_used = (peak_mem[] > baseline) ? (peak_mem[] - baseline) : 0
-#     return peak_used / 1024^2 # Trả về dung lượng theo đơn vị MB
-# end
-
-# function run_full_benchmarks()
-#     if !isdir("docs") mkpath("docs") end
-
-#     experiment_configs = Dict(
-#         "mushrooms.txt" => [60, 55, 50, 45, 40],
-#         "accidents.txt" => [90, 85, 80, 75, 70],
-#         "retail.txt"    => [5, 2, 1, 0.5, 0.2],
-#         "T10I4D100K.txt" => [10, 5, 2, 1, 0.5]
-#     )
-
-#     println(">>> Đang chạy Benchmark trên các tập dữ liệu...")
-#     open("docs/benchmark_results.csv", "w") do io
-#         println(io, "Dataset,Minsup,Version,Time_ms,Peak_RAM_MB,ItemsetCount")
-
-#         for (fname, msups) in experiment_configs
-#             path = "data/benchmark/" * fname
-#             println("\nDataset: $fname")
-#             for m in msups
-#                 print("  Minsup $m%: ")
-                
-#                 # ==========================================
-#                 # 1. ĐO BẢN GỐC (BASE)
-#                 # ==========================================
-#                 # Chạy lần 1: Lấy Time
-#                 GC.gc() 
-#                 time_b_sec = @elapsed run_hmine(path, m, "temp.txt", optimized=false)
-                
-#                 # Chạy lần 2: Lấy Peak RAM
-#                 mem_b_mb = measure_peak_ram(() -> run_hmine(path, m, "temp_ram.txt", optimized=false))
-#                 count_b = countlines("temp.txt")
-                
-#                 println(io, "$fname,$m,Base,$(time_b_sec*1000),$mem_b_mb,$count_b")
-                
-#                 # ==========================================
-#                 # 2. ĐO BẢN TỐI ƯU (OPTIMIZED)
-#                 # ==========================================
-#                 # Chạy lần 1: Lấy Time
-#                 GC.gc()
-#                 time_o_sec = @elapsed run_hmine(path, m, "temp.txt", optimized=true)
-                
-#                 # Chạy lần 2: Lấy Peak RAM
-#                 mem_o_mb = measure_peak_ram(() -> run_hmine(path, m, "temp_ram.txt", optimized=true))
-#                 count_o = countlines("temp.txt")
-                
-#                 println(io, "$fname,$m,Optimized,$(time_o_sec*1000),$mem_o_mb,$count_o")
-                
-#                 # ==========================================
-#                 # 3. ĐO SPMF
-#                 # ==========================================
-#                 time_spmf = measure_spmf(path, m)
-#                 println(io, "$fname,$m,SPMF,$time_spmf,0,0") 
-                
-#                 println("Done (Base Time: $(round(time_b_sec*1000))ms | Opt Time: $(round(time_o_sec*1000))ms | Opt RAM: $(round(mem_o_mb, digits=2))MB)")
-#             end
-#         end
-#     end
-
-#     # Thực nghiệm Scalability (Khả năng mở rộng)
-#     println("\n>>> Đang chạy thực nghiệm Scalability trên Accidents.txt...")
-#     percentages = [10, 25, 50, 75, 100]
-#     fixed_minsup = 80 
-    
-#     open("docs/scalability_results.csv", "w") do io
-#         println(io, "Percentage,Size_lines,Time_ms,Peak_RAM_MB")
-#         for p in percentages
-#             temp_path = "data/benchmark/accidents_$(p)pct.txt"
-#             slice_dataset("data/benchmark/accidents.txt", temp_path, p)
-            
-#             # Scalability cũng chạy 2 lần tương tự để lấy cả Time và RAM
-#             GC.gc()
-#             time_scale = @elapsed run_hmine(temp_path, fixed_minsup, "temp.txt", optimized=true)
-#             mem_scale = measure_peak_ram(() -> run_hmine(temp_path, fixed_minsup, "temp_ram.txt", optimized=true))
-            
-#             println(io, "$p,$(countlines(temp_path)),$(time_scale*1000),$mem_scale")
-#             println("  Kích thước $p%: $(round(time_scale*1000))ms - RAM: $(round(mem_scale, digits=2))MB")
-#             rm(temp_path) 
-#         end
-#     end
-    
-#     # Dọn file rác do lần chạy RAM tạo ra
-#     if isfile("temp_ram.txt") rm("temp_ram.txt") end
-    
-#     println("\n>>> TẤT CẢ THỰC NGHIỆM ĐÃ HOÀN TẤT. Dữ liệu lưu tại thư mục docs/")
-# end
-
-# run_full_benchmarks()
-
-
-
-
-
-
-
-
-
-
-
-
-
-# tests/test_benchmark.jl
-# include("../src/main.jl")
-# using Statistics, Printf
-
-# Hàm hỗ trợ cắt file để làm thực nghiệm Scalability
-# function slice_dataset(input_path, output_path, percentage)
-#     lines = readlines(input_path)
-#     n = Int(floor(length(lines) * percentage / 100))
-#     open(output_path, "w") do f
-#         for i in 1:n
-#             println(f, lines[i])
-#         end
-#     end
-# end
-
-# Hàm đo thời gian chạy của SPMF (Java)
-# function measure_spmf(input_path, minsup)
-#     output_path = "temp_spmf.txt"
-#     time_sec = @elapsed begin
-#         cmd = `java -jar data/spmf.jar run HMine $input_path $output_path $(minsup)%`
-#         run(pipeline(cmd, devnull)) 
-#     end
-#     return time_sec * 1000 
-# end
-
-# --- Hàm đo Peak RAM cực nhanh (Aggressive Polling) ---
+# # =========================
+# # Peak RAM (Đo RAM nội bộ Julia)
+# # =========================
 # function measure_peak_ram_mb(func)
-#     GC.gc() # Dọn rác tạo baseline sạch
+#     GC.gc()
 #     baseline = Base.gc_live_bytes()
-    
+
 #     done = Threads.Atomic{Bool}(false)
 #     peak_mem = Threads.Atomic{UInt64}(0)
-    
-#     Chạy luồng ngầm giám sát RAM
+
 #     monitor_task = Threads.@spawn begin
 #         while !done[]
-#             current_mem = Base.gc_live_bytes()
-#             if current_mem > peak_mem[]
-#                 peak_mem[] = current_mem
+#             v = Base.gc_live_bytes()
+#             if v > peak_mem[]
+#                 peak_mem[] = v
 #             end
-#             Dùng yield() thay vì sleep() để lấy mẫu liên tục ở tốc độ tối đa của CPU
-#             yield() 
+#             yield()
 #         end
 #     end
-    
-#     Chạy thuật toán chính
+
 #     func()
-    
-#     Dừng luồng đo
+
 #     done[] = true
 #     wait(monitor_task)
-    
-#     Tính toán Peak RAM thực dùng và đổi sang MB
-#     peak_used_bytes = (peak_mem[] > baseline) ? (peak_mem[] - baseline) : 0
-#     return peak_used_bytes / 1024^2 # Trả về đơn vị MB
+
+#     peak = peak_mem[] > baseline ? peak_mem[] - baseline : 0
+#     return peak / 1024^2
 # end
 
-# function run_full_benchmarks()
-#     if !isdir("docs") mkpath("docs") end
+# # =========================
+# # Correctness Logic
+# # =========================
+# function load_patterns(file)
+#     s = Set{Vector{Int}}()
+#     if !isfile(file) return s end
+    
+#     open(file) do f
+#         for line in eachline(f)
+#             if isempty(strip(line)) continue end
+#             if occursin("#SUP", line)
+#                 p = split(line, "#SUP")[1]
+#                 # Thêm sort() để đảm bảo (1 2) giống (2 1) khi so sánh
+#                 items = sort(parse.(Int, split(strip(p))))
+#                 push!(s, items)
+#             end
+#         end
+#     end
+#     return s
+# end
 
-#     experiment_configs = Dict(
-#         "mushrooms.txt" => [60, 55, 50, 45, 40],
-#         "accidents.txt" => [90, 85, 80, 75, 70],
-#         "retail.txt"    => [5, 2, 1, 0.5, 0.2],
-#         "T10I4D100K.txt" => [10, 5, 2, 1, 0.5]
+# function calculate_correctness_pct(my_file, spmf_file)
+#     my_set = load_patterns(my_file)
+#     spmf_set = load_patterns(spmf_file)
+    
+#     if isempty(spmf_set)
+#         return isempty(my_set) ? 100.0 : 0.0
+#     end
+    
+#     # Tính số lượng itemset tìm được nằm trong tập kết quả của SPMF
+#     correct_hits = length(intersect(my_set, spmf_set))
+#     return (correct_hits / length(spmf_set)) * 100.0
+# end
+
+# # =========================
+# # MAIN
+# # =========================
+# function run_full_benchmarks()
+
+#     isdir("docs") || mkpath("docs")
+
+#     configs = Dict(
+#         "mushrooms.txt" => [60,55,50,45,40],
+#         "retail.txt" => [5,2,1,0.5,0.2],
+#         "T10I4D100K.txt" => [10,5,2,1,0.5],
+#         "accidents.txt" => [90,85,80,75,70]
 #     )
 
-#     println(">>> Đang chạy Benchmark trên các tập dữ liệu...")
-#     open("docs/benchmark_results.csv", "w") do io
-#         Tiêu đề cột dùng Peak_RAM_MB
-#         println(io, "Dataset,Minsup,Version,Time_ms,Peak_RAM_MB,ItemsetCount")
+#     println(">>> RUN BENCHMARK")
 
-#         for (fname, msups) in experiment_configs
-#             path = "data/benchmark/" * fname
-#             println("\nDataset: $fname")
+#     open("docs/benchmark_results.csv", "w") do io
+#         println(io, "Dataset,Minsup,Version,Time_ms,Peak_RAM_MB,Correctness")
+
+#         for (file, msups) in configs
+#             path = "data/benchmark/" * file
+#             println("\nDataset: $file")
+
 #             for m in msups
-#                 print("  Minsup $m%: ")
-                
-#                 --- 1. Đo bản Gốc (Base) ---
+#                 # --- Chạy SPMF trước để làm chuẩn ---
+#                 spmf_out = "temp_spmf.txt"
+#                 t_spmf = measure_spmf(path, m)
+#                 println(io, "$file,$m,SPMF,$t_spmf,0.0,100.0")
+
+#                 # --- BASE ---
 #                 GC.gc()
-#                 Chạy lần 1 để lấy Time (làm tròn 4 số)
-#                 time_b_ms = round((@elapsed run_hmine(path, m, "temp.txt", optimized=false)) * 1000, digits=4)
-#                 Chạy lần 2 lấy Peak RAM (làm tròn 2 số, đơn vị MB)
-#                 mem_b_mb = round(measure_peak_ram_mb(() -> run_hmine(path, m, "temp_ram.txt", optimized=false)), digits=2)
-#                 count_b = countlines("temp.txt")
-                
-#                 println(io, "$fname,$m,Base,$time_b_ms,$mem_b_mb,$count_b")
-                
-#                 --- 2. Đo bản Tối ưu (Optimized) ---
+#                 out_base = "out_base.txt"
+#                 # Chạy lần 1 đo thời gian
+#                 t_base = @elapsed run_hmine(path, m, out_base, optimized=false)
+#                 t_base *= 1000
+
+#                 # Chạy lần 2 đo RAM
+#                 mem_base = measure_peak_ram_mb(() ->
+#                     run_hmine(path, m, "out_base_ram.txt", optimized=false)
+#                 )
+
+#                 c_base_pct = calculate_correctness_pct(out_base, spmf_out)
+#                 println(io, "$file,$m,Base,$t_base,$mem_base,$c_base_pct")
+
+#                 # --- OPTIMIZED ---
 #                 GC.gc()
-#                 time_o_ms = round((@elapsed run_hmine(path, m, "temp.txt", optimized=true)) * 1000, digits=4)
-#                 mem_o_mb = round(measure_peak_ram_mb(() -> run_hmine(path, m, "temp_ram.txt", optimized=true)), digits=2)
-#                 count_o = countlines("temp.txt")
-                
-#                 println(io, "$fname,$m,Optimized,$time_o_ms,$mem_o_mb,$count_o")
-                
-#                 --- 3. Đo SPMF ---
-#                 time_spmf = round(measure_spmf(path, m), digits=4)
-#                 println(io, "$fname,$m,SPMF,$time_spmf,0.0,0") 
-                
-#                 println("Done (Base: $(time_b_ms)ms | Opt: $(time_o_ms)ms | Peak RAM Opt: $(mem_o_mb) MB)")
+#                 out_opt = "out_opt.txt"
+#                 # Chạy lần 1 đo thời gian
+#                 t_opt = @elapsed run_hmine(path, m, out_opt, optimized=true)
+#                 t_opt *= 1000
+
+#                 # Chạy lần 2 đo RAM
+#                 mem_opt = measure_peak_ram_mb(() ->
+#                     run_hmine(path, m, "out_opt_ram.txt", optimized=true)
+#                 )
+
+#                 c_opt_pct = calculate_correctness_pct(out_opt, spmf_out)
+#                 println(io, "$file,$m,Optimized,$t_opt,$mem_opt,$c_opt_pct")
+
+#                 println("Done $file m=$m | Base=$(round(t_base,digits=2))ms | Opt=$(round(t_opt,digits=2))ms | Acc=$(round(c_opt_pct, digits=2))%")
+#                 sleep(3)
 #             end
 #         end
 #     end
 
-#     --- Thực nghiệm Scalability ---
-#     println("\n>>> Đang chạy thực nghiệm Scalability trên Accidents.txt...")
-#     percentages = [10, 25, 50, 75, 100]
-#     fixed_minsup = 80 
-    
+#     # =========================
+#     # SCALABILITY
+#     # =========================
+#     println("\n>>> SCALABILITY TEST")
+
+#     percentages = [10,25,50,75,100]
+#     fixed_minsup = 80
+
 #     open("docs/scalability_results.csv", "w") do io
 #         println(io, "Percentage,Size_lines,Time_ms,Peak_RAM_MB")
+
 #         for p in percentages
-#             temp_path = "data/benchmark/accidents_$(p)pct.txt"
-#             slice_dataset("data/benchmark/accidents.txt", temp_path, p)
-            
+#             temp = "data/benchmark/accidents_$(p)pct.txt"
+#             slice_dataset("data/benchmark/accidents.txt", temp, p)
+
 #             GC.gc()
-#             time_scale_ms = round((@elapsed run_hmine(temp_path, fixed_minsup, "temp.txt", optimized=true)) * 1000, digits=4)
-#             mem_scale_mb = round(measure_peak_ram_mb(() -> run_hmine(temp_path, fixed_minsup, "temp_ram.txt", optimized=true)), digits=2)
-            
-#             println(io, "$p,$(countlines(temp_path)),$time_scale_ms,$mem_scale_mb")
-#             println("  Kích thước $p%: $(time_scale_ms)ms - Peak RAM: $(mem_scale_mb) MB")
-#             rm(temp_path) 
+#             t = @elapsed run_hmine(temp, fixed_minsup, "tmp.txt", optimized=true)
+#             t *= 1000
+
+#             mem = measure_peak_ram_mb(() ->
+#                 run_hmine(temp, fixed_minsup, "tmp_ram.txt", optimized=true)
+#             )
+
+#             line_count = countlines(temp)
+#             println(io, "$p,$line_count,$t,$mem")
+#             println("  $p% -> $(round(t,digits=2)) ms | $(round(mem,digits=2)) MB")
+
+#             rm(temp)
 #         end
 #     end
-    
-#     Dọn dẹp file tạm của quá trình đo RAM
-#     if isfile("temp_ram.txt") rm("temp_ram.txt") end
-    
-#     println("\n>>> TẤT CẢ THỰC NGHIỆM ĐÃ HOÀN TẤT. Dữ liệu lưu tại thư mục docs/")
+
+#     # Dọn dẹp file tạm
+#     for f in ["out_base.txt", "out_base_ram.txt", "out_opt.txt", "out_opt_ram.txt", "temp_spmf.txt", "tmp.txt", "tmp_ram.txt"]
+#         isfile(f) && rm(f)
+#     end
+
+#     println("\n>>> ALL DONE")
 # end
 
 # run_full_benchmarks()
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 
 include("../src/main.jl")
-using Statistics, Printf
+using Statistics, Printf, Random
 
 # =========================
 # Slice dataset (scalability)
@@ -421,11 +224,9 @@ end
 # =========================
 function measure_spmf(input_path, minsup)
     output_path = "temp_spmf.txt"
-    # Xóa file cũ nếu có để đảm bảo tính đúng đắn
     isfile(output_path) && rm(output_path)
 
     time_ms = @elapsed begin
-        # Chạy lệnh java
         cmd = `java -jar data/spmf.jar run HMine $input_path $output_path $(minsup)%`
         run(pipeline(cmd, devnull))
     end
@@ -434,7 +235,7 @@ function measure_spmf(input_path, minsup)
 end
 
 # =========================
-# Peak RAM (Đo RAM nội bộ Julia)
+# Peak RAM (Julia heap estimate)
 # =========================
 function measure_peak_ram_mb(func)
     GC.gc()
@@ -463,100 +264,136 @@ function measure_peak_ram_mb(func)
 end
 
 # =========================
-# Correctness Logic
+# Support-aware pattern loading
 # =========================
-function load_patterns(file)
-    s = Set{Vector{Int}}()
-    if !isfile(file) return s end
-    
+function load_patterns_with_support(file)
+    d = Dict{Tuple{Vararg{Int}}, Int}()
+    if !isfile(file)
+        return d
+    end
+
     open(file) do f
         for line in eachline(f)
-            if isempty(strip(line)) continue end
-            if occursin("#SUP", line)
-                p = split(line, "#SUP")[1]
-                # Thêm sort() để đảm bảo (1 2) giống (2 1) khi so sánh
-                items = sort(parse.(Int, split(strip(p))))
-                push!(s, items)
+            line = strip(line)
+            if isempty(line) || startswith(line, "@")
+                continue
             end
+
+            parts = split(line, " #SUP: ")
+            items = Tuple(sort(parse.(Int, split(strip(parts[1])))))
+            sup = parse(Int, strip(parts[2]))
+            d[items] = sup
         end
     end
-    return s
+    return d
 end
 
 function calculate_correctness_pct(my_file, spmf_file)
-    my_set = load_patterns(my_file)
-    spmf_set = load_patterns(spmf_file)
-    
-    if isempty(spmf_set)
-        return isempty(my_set) ? 100.0 : 0.0
+    my_dict = load_patterns_with_support(my_file)
+    spmf_dict = load_patterns_with_support(spmf_file)
+
+    if isempty(spmf_dict)
+        return isempty(my_dict) ? 100.0 : 0.0
     end
-    
-    # Tính số lượng itemset tìm được nằm trong tập kết quả của SPMF
-    correct_hits = length(intersect(my_set, spmf_set))
-    return (correct_hits / length(spmf_set)) * 100.0
+
+    correct = 0
+    for (itemset, sup) in spmf_dict
+        if haskey(my_dict, itemset) && my_dict[itemset] == sup
+            correct += 1
+        end
+    end
+
+    return 100.0 * correct / length(spmf_dict)
+end
+
+function count_patterns(file)
+    if !isfile(file)
+        return 0
+    end
+    cnt = 0
+    open(file) do f
+        for line in eachline(f)
+            line = strip(line)
+            if !isempty(line) && occursin("#SUP:", line)
+                cnt += 1
+            end
+        end
+    end
+    return cnt
+end
+
+# =========================
+# Synthetic datasets for avg transaction length
+# =========================
+function generate_synthetic_dataset(output_path; n_trans=5000, n_items=100, trans_len=10, seed=42)
+    rng = MersenneTwister(seed)
+    open(output_path, "w") do io
+        for _ in 1:n_trans
+            items = sort(randperm(rng, n_items)[1:trans_len])
+            println(io, join(items, " "))
+        end
+    end
 end
 
 # =========================
 # MAIN
 # =========================
 function run_full_benchmarks()
-
     isdir("docs") || mkpath("docs")
 
     configs = Dict(
-        "mushrooms.txt" => [60,55,50,45,40],
-        "retail.txt" => [5,2,1,0.5,0.2],
-        "T10I4D100K.txt" => [10,5,2,1,0.5],
-        "accidents.txt" => [90,85,80,75,70]
+        "mushrooms.txt"   => [60, 55, 50, 45, 40],
+        "retail.txt"      => [5, 2, 1, 0.5, 0.2],
+        "T10I4D100K.txt"  => [10, 5, 2, 1, 0.5],
+        "accidents.txt"   => [90, 85, 80, 75, 70]
     )
 
     println(">>> RUN BENCHMARK")
 
     open("docs/benchmark_results.csv", "w") do io
-        println(io, "Dataset,Minsup,Version,Time_ms,Peak_RAM_MB,Correctness")
+        println(io, "Dataset,Minsup,Version,Time_ms,Peak_RAM_MB,Correctness,Pattern_Count")
 
         for (file, msups) in configs
             path = "data/benchmark/" * file
             println("\nDataset: $file")
 
             for m in msups
-                # --- Chạy SPMF trước để làm chuẩn ---
+                # --- SPMF ---
                 spmf_out = "temp_spmf.txt"
                 t_spmf = measure_spmf(path, m)
-                println(io, "$file,$m,SPMF,$t_spmf,0.0,100.0")
+                pattern_count_spmf = count_patterns(spmf_out)
+                println(io, "$file,$m,SPMF,$t_spmf,missing,100.0,$pattern_count_spmf")
 
                 # --- BASE ---
                 GC.gc()
                 out_base = "out_base.txt"
-                # Chạy lần 1 đo thời gian
                 t_base = @elapsed run_hmine(path, m, out_base, optimized=false)
                 t_base *= 1000
 
-                # Chạy lần 2 đo RAM
                 mem_base = measure_peak_ram_mb(() ->
                     run_hmine(path, m, "out_base_ram.txt", optimized=false)
                 )
 
                 c_base_pct = calculate_correctness_pct(out_base, spmf_out)
-                println(io, "$file,$m,Base,$t_base,$mem_base,$c_base_pct")
+                p_base = count_patterns(out_base)
+                println(io, "$file,$m,Base,$t_base,$mem_base,$c_base_pct,$p_base")
 
                 # --- OPTIMIZED ---
                 GC.gc()
                 out_opt = "out_opt.txt"
-                # Chạy lần 1 đo thời gian
                 t_opt = @elapsed run_hmine(path, m, out_opt, optimized=true)
                 t_opt *= 1000
 
-                # Chạy lần 2 đo RAM
                 mem_opt = measure_peak_ram_mb(() ->
                     run_hmine(path, m, "out_opt_ram.txt", optimized=true)
                 )
 
                 c_opt_pct = calculate_correctness_pct(out_opt, spmf_out)
-                println(io, "$file,$m,Optimized,$t_opt,$mem_opt,$c_opt_pct")
+                p_opt = count_patterns(out_opt)
+                println(io, "$file,$m,Optimized,$t_opt,$mem_opt,$c_opt_pct,$p_opt")
 
-                println("Done $file m=$m | Base=$(round(t_base,digits=2))ms | Opt=$(round(t_opt,digits=2))ms | Acc=$(round(c_opt_pct, digits=2))%")
-                sleep(3)
+                println("Done $file m=$m | Base=$(round(t_base,digits=2))ms | Opt=$(round(t_opt,digits=2))ms | Correct=$(round(c_opt_pct,digits=2))%")
+                sleep(2)
             end
         end
     end
@@ -566,7 +403,7 @@ function run_full_benchmarks()
     # =========================
     println("\n>>> SCALABILITY TEST")
 
-    percentages = [10,25,50,75,100]
+    percentages = [10, 25, 50, 75, 100]
     fixed_minsup = 80
 
     open("docs/scalability_results.csv", "w") do io
@@ -592,8 +429,44 @@ function run_full_benchmarks()
         end
     end
 
-    # Dọn dẹp file tạm
-    for f in ["out_base.txt", "out_base_ram.txt", "out_opt.txt", "out_opt_ram.txt", "temp_spmf.txt", "tmp.txt", "tmp_ram.txt"]
+    # =========================
+    # AVG TRANSACTION LENGTH EXPERIMENT
+    # =========================
+    println("\n>>> AVG TRANSACTION LENGTH TEST")
+
+    trans_lengths = [5, 10, 15, 20, 25]
+    fixed_minsup = 5.0
+
+    open("docs/avg_transaction_length_results.csv", "w") do io
+        println(io, "Avg_Transaction_Length,Time_ms,Peak_RAM_MB,Pattern_Count")
+
+        for len_t in trans_lengths
+            temp_file = "data/benchmark/syn_len_$(len_t).txt"
+            generate_synthetic_dataset(temp_file; n_trans=5000, n_items=100, trans_len=len_t, seed=42+len_t)
+
+            GC.gc()
+            out_file = "tmp_len_out.txt"
+            t = @elapsed run_hmine(temp_file, fixed_minsup, out_file, optimized=true)
+            t *= 1000
+
+            mem = measure_peak_ram_mb(() ->
+                run_hmine(temp_file, fixed_minsup, "tmp_len_ram.txt", optimized=true)
+            )
+
+            pcount = count_patterns(out_file)
+            println(io, "$len_t,$t,$mem,$pcount")
+            println("  AvgLen=$len_t -> $(round(t,digits=2)) ms | $(round(mem,digits=2)) MB | $pcount patterns")
+
+            rm(temp_file; force=true)
+        end
+    end
+
+    # cleanup
+    for f in [
+        "out_base.txt", "out_base_ram.txt", "out_opt.txt", "out_opt_ram.txt",
+        "temp_spmf.txt", "tmp.txt", "tmp_ram.txt",
+        "tmp_len_out.txt", "tmp_len_ram.txt"
+    ]
         isfile(f) && rm(f)
     end
 
