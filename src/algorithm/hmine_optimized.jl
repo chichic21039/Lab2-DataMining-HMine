@@ -421,8 +421,8 @@
 
 
 # src/algorithm/hmine_optimized.jl
-using .Structures
-using .Utils
+using ..Structures: HEntry, HeaderTable
+using ..Utils
 
 # ==============================================================================
 # PHẦN 1: CẤU TRÚC VÀ HÀM TRỢ GIÚP CHO FP-TREE (Dành cho dữ liệu Dày Đặc)

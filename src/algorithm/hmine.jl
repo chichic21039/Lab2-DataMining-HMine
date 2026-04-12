@@ -1,5 +1,5 @@
-using .Structures
-using .Utils
+using ..Structures: HEntry, HeaderTable
+using ..Utils
 
 function mine_h(prefix::Vector{Int},
                 header::HeaderTable,
