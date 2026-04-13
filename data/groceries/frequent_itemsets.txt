@@ -1,0 +1,336 @@
+=========================================
+           FREQUENT ITEMSETS            
+=========================================
+{ whole milk } #SUP: 2513
+{ other vegetables } #SUP: 1903
+{ rolls/buns } #SUP: 1809
+{ soda } #SUP: 1715
+{ yogurt } #SUP: 1372
+{ bottled water } #SUP: 1087
+{ root vegetables } #SUP: 1072
+{ tropical fruit } #SUP: 1032
+{ shopping bags } #SUP: 969
+{ sausage } #SUP: 924
+{ pastry } #SUP: 875
+{ citrus fruit } #SUP: 814
+{ bottled beer } #SUP: 792
+{ newspapers } #SUP: 785
+{ canned beer } #SUP: 764
+{ pip fruit } #SUP: 744
+{ whole milk, other vegetables } #SUP: 736
+{ fruit/vegetable juice } #SUP: 711
+{ whipped/sour cream } #SUP: 705
+{ brown bread } #SUP: 638
+{ domestic eggs } #SUP: 624
+{ frankfurter } #SUP: 580
+{ margarine } #SUP: 576
+{ coffee } #SUP: 571
+{ pork } #SUP: 567
+{ whole milk, rolls/buns } #SUP: 557
+{ yogurt, whole milk } #SUP: 551
+{ butter } #SUP: 545
+{ curd } #SUP: 524
+{ beef } #SUP: 516
+{ napkins } #SUP: 515
+{ chocolate } #SUP: 488
+{ whole milk, root vegetables } #SUP: 481
+{ frozen vegetables } #SUP: 473
+{ other vegetables, root vegetables } #SUP: 466
+{ yogurt, other vegetables } #SUP: 427
+{ chicken } #SUP: 422
+{ other vegetables, rolls/buns } #SUP: 419
+{ tropical fruit, whole milk } #SUP: 416
+{ white bread } #SUP: 414
+{ whole milk, soda } #SUP: 394
+{ cream cheese } #SUP: 390
+{ waffles } #SUP: 378
+{ rolls/buns, soda } #SUP: 377
+{ salty snack } #SUP: 372
+{ long life bakery product } #SUP: 368
+{ dessert } #SUP: 365
+{ tropical fruit, other vegetables } #SUP: 353
+{ whole milk, bottled water } #SUP: 338
+{ yogurt, rolls/buns } #SUP: 338
+{ sugar } #SUP: 333
+{ UHT-milk } #SUP: 329
+{ berries } #SUP: 327
+{ hamburger meat } #SUP: 327
+{ whole milk, pastry } #SUP: 327
+{ hygiene articles } #SUP: 324
+{ other vegetables, soda } #SUP: 322
+{ whole milk, whipped/sour cream } #SUP: 317
+{ onions } #SUP: 305
+{ rolls/buns, sausage } #SUP: 301
+{ citrus fruit, whole milk } #SUP: 300
+{ specialty chocolate } #SUP: 299
+{ whole milk, pip fruit } #SUP: 296
+{ whole milk, domestic eggs } #SUP: 295
+{ whole milk, sausage } #SUP: 294
+{ candy } #SUP: 294
+{ tropical fruit, yogurt } #SUP: 288
+{ bottled water, soda } #SUP: 285
+{ other vegetables, whipped/sour cream } #SUP: 284
+{ citrus fruit, other vegetables } #SUP: 284
+{ frozen meals } #SUP: 279
+{ misc. beverages } #SUP: 279
+{ oil } #SUP: 276
+{ butter milk } #SUP: 275
+{ whole milk, butter } #SUP: 271
+{ yogurt, soda } #SUP: 269
+{ whole milk, newspapers } #SUP: 269
+{ specialty bar } #SUP: 269
+{ other vegetables, sausage } #SUP: 265
+{ whole milk, fruit/vegetable juice } #SUP: 262
+{ whole milk, curd } #SUP: 257
+{ pip fruit, other vegetables } #SUP: 257
+{ beverages } #SUP: 256
+{ ham } #SUP: 256
+{ yogurt, root vegetables } #SUP: 254
+{ meat } #SUP: 254
+{ whole milk, brown bread } #SUP: 248
+{ ice cream } #SUP: 246
+{ other vegetables, bottled water } #SUP: 244
+{ tropical fruit, rolls/buns } #SUP: 242
+{ soda, shopping bags } #SUP: 242
+{ sliced cheese } #SUP: 241
+{ whole milk, shopping bags } #SUP: 241
+{ hard cheese } #SUP: 241
+{ soda, sausage } #SUP: 239
+{ rolls/buns, root vegetables } #SUP: 239
+{ rolls/buns, bottled water } #SUP: 238
+{ margarine, whole milk } #SUP: 238
+{ cat food } #SUP: 229
+{ other vegetables, shopping bags } #SUP: 228
+{ whole milk, other vegetables, root vegetables } #SUP: 228
+{ yogurt, bottled water } #SUP: 226
+{ other vegetables, pastry } #SUP: 222
+{ grapes } #SUP: 220
+{ yogurt, whole milk, other vegetables } #SUP: 219
+{ other vegetables, domestic eggs } #SUP: 219
+{ whole milk, pork } #SUP: 218
+{ other vegetables, pork } #SUP: 213
+{ citrus fruit, yogurt } #SUP: 213
+{ whole milk, beef } #SUP: 209
+{ chewing gum } #SUP: 207
+{ other vegetables, fruit/vegetable juice } #SUP: 207
+{ tropical fruit, root vegetables } #SUP: 207
+{ soda, pastry } #SUP: 207
+{ rolls/buns, pastry } #SUP: 206
+{ tropical fruit, soda } #SUP: 205
+{ yogurt, whipped/sour cream } #SUP: 204
+{ whole milk, frankfurter } #SUP: 202
+{ whole milk, bottled beer } #SUP: 201
+{ tropical fruit, pip fruit } #SUP: 201
+{ whole milk, frozen vegetables } #SUP: 201
+{ other vegetables, butter } #SUP: 197
+{ citrus fruit, tropical fruit } #SUP: 196
+{ margarine, other vegetables } #SUP: 194
+{ rolls/buns, newspapers } #SUP: 194
+{ other vegetables, beef } #SUP: 194
+{ whole milk, napkins } #SUP: 194
+{ yogurt, sausage } #SUP: 193
+{ rolls/buns, shopping bags } #SUP: 192
+{ other vegetables, newspapers } #SUP: 190
+{ rolls/buns, frankfurter } #SUP: 189
+{ detergent } #SUP: 189
+{ red/blush wine } #SUP: 189
+{ white wine } #SUP: 187
+{ other vegetables, brown bread } #SUP: 184
+{ yogurt, fruit/vegetable juice } #SUP: 184
+{ coffee, whole milk } #SUP: 184
+{ soda, root vegetables } #SUP: 183
+{ tropical fruit, bottled water } #SUP: 182
+{ soda, fruit/vegetable juice } #SUP: 181
+{ yogurt, pip fruit } #SUP: 177
+{ whole milk, other vegetables, rolls/buns } #SUP: 176
+{ pickled vegetables } #SUP: 176
+{ other vegetables, chicken } #SUP: 176
+{ other vegetables, frozen vegetables } #SUP: 175
+{ baking powder } #SUP: 174
+{ yogurt, pastry } #SUP: 174
+{ citrus fruit, root vegetables } #SUP: 174
+{ semi-finished bread } #SUP: 174
+{ dishes } #SUP: 173
+{ whole milk, chicken } #SUP: 173
+{ flour } #SUP: 171
+{ beef, root vegetables } #SUP: 171
+{ pot plants } #SUP: 170
+{ yogurt, curd } #SUP: 170
+{ other vegetables, curd } #SUP: 169
+{ tropical fruit, whole milk, other vegetables } #SUP: 168
+{ soft cheese } #SUP: 168
+{ whole milk, white bread } #SUP: 168
+{ root vegetables, whipped/sour cream } #SUP: 168
+{ bottled beer, soda } #SUP: 167
+{ citrus fruit, rolls/buns } #SUP: 165
+{ whole milk, chocolate } #SUP: 164
+{ processed cheese } #SUP: 163
+{ other vegetables, frankfurter } #SUP: 162
+{ whole milk, cream cheese } #SUP: 162
+{ herbs } #SUP: 160
+{ other vegetables, bottled beer } #SUP: 159
+{ bottled beer, bottled water } #SUP: 155
+{ bottled water, root vegetables } #SUP: 154
+{ sausage, shopping bags } #SUP: 154
+{ rolls/buns, domestic eggs } #SUP: 154
+{ pip fruit, root vegetables } #SUP: 153
+{ yogurt, whole milk, rolls/buns } #SUP: 153
+{ yogurt, newspapers } #SUP: 151
+{ yogurt, shopping bags } #SUP: 150
+{ tropical fruit, yogurt, whole milk } #SUP: 149
+{ whole milk, sugar } #SUP: 148
+{ canned fish } #SUP: 148
+{ pasta } #SUP: 148
+{ root vegetables, sausage } #SUP: 147
+{ whole milk, hamburger meat } #SUP: 145
+{ margarine, rolls/buns } #SUP: 145
+{ rolls/buns, whipped/sour cream } #SUP: 144
+{ whole milk, other vegetables, whipped/sour cream } #SUP: 144
+{ yogurt, butter } #SUP: 144
+{ soda, newspapers } #SUP: 144
+{ yogurt, whole milk, root vegetables } #SUP: 143
+{ rolls/buns, fruit/vegetable juice } #SUP: 143
+{ yogurt, brown bread } #SUP: 143
+{ other vegetables, napkins } #SUP: 142
+{ root vegetables, domestic eggs } #SUP: 141
+{ yogurt, domestic eggs } #SUP: 141
+{ margarine, yogurt } #SUP: 140
+{ bottled water, fruit/vegetable juice } #SUP: 140
+{ seasonal products } #SUP: 140
+{ other vegetables, onions } #SUP: 140
+{ pip fruit, rolls/buns } #SUP: 137
+{ tropical fruit, sausage } #SUP: 137
+{ whole milk, other vegetables, soda } #SUP: 137
+{ soda, canned beer } #SUP: 136
+{ tropical fruit, whipped/sour cream } #SUP: 136
+{ other vegetables, hamburger meat } #SUP: 136
+{ citrus fruit, pip fruit } #SUP: 136
+{ cream cheese, other vegetables } #SUP: 135
+{ tropical fruit, fruit/vegetable juice } #SUP: 135
+{ whole milk, dessert } #SUP: 135
+{ other vegetables, white bread } #SUP: 135
+{ root vegetables, pork } #SUP: 134
+{ rolls/buns, beef } #SUP: 134
+{ rolls/buns, bottled beer } #SUP: 134
+{ tropical fruit, shopping bags } #SUP: 133
+{ chocolate, soda } #SUP: 133
+{ whole milk, pip fruit, other vegetables } #SUP: 133
+{ whole milk, long life bakery product } #SUP: 133
+{ citrus fruit, bottled water } #SUP: 133
+{ butter, rolls/buns } #SUP: 132
+{ coffee, other vegetables } #SUP: 132
+{ pip fruit, soda } #SUP: 131
+{ tropical fruit, pastry } #SUP: 130
+{ cake bar } #SUP: 130
+{ citrus fruit, whole milk, other vegetables } #SUP: 128
+{ packaged fruit/vegetables } #SUP: 128
+{ butter, root vegetables } #SUP: 127
+{ yogurt, other vegetables, root vegetables } #SUP: 127
+{ citrus fruit, soda } #SUP: 126
+{ root vegetables, shopping bags } #SUP: 126
+{ whole milk, hygiene articles } #SUP: 126
+{ whole milk, waffles } #SUP: 125
+{ whole milk, rolls/buns, root vegetables } #SUP: 125
+{ other vegetables, chocolate } #SUP: 125
+{ soda, brown bread } #SUP: 124
+{ rolls/buns, brown bread } #SUP: 124
+{ pastry, sausage } #SUP: 123
+{ yogurt, frozen vegetables } #SUP: 122
+{ soda, domestic eggs } #SUP: 122
+{ yogurt, cream cheese } #SUP: 122
+{ yogurt, napkins } #SUP: 121
+{ whole milk, other vegetables, domestic eggs } #SUP: 121
+{ tropical fruit, other vegetables, root vegetables } #SUP: 121
+{ tropical fruit, yogurt, other vegetables } #SUP: 121
+{ other vegetables, rolls/buns, root vegetables } #SUP: 120
+{ whole milk, onions } #SUP: 119
+{ bottled water, sausage } #SUP: 118
+{ soda, napkins } #SUP: 118
+{ fruit/vegetable juice, root vegetables } #SUP: 118
+{ tropical fruit, whole milk, root vegetables } #SUP: 118
+{ mustard } #SUP: 118
+{ pastry, shopping bags } #SUP: 117
+{ soda, pork } #SUP: 117
+{ tropical fruit, newspapers } #SUP: 116
+{ whole milk, berries } #SUP: 116
+{ rolls/buns, chocolate } #SUP: 116
+{ rolls/buns, napkins } #SUP: 115
+{ frozen fish } #SUP: 115
+{ yogurt, beef } #SUP: 115
+{ other vegetables, dessert } #SUP: 114
+{ root vegetables, frozen vegetables } #SUP: 114
+{ whole milk, butter milk } #SUP: 114
+{ soda, whipped/sour cream } #SUP: 114
+{ newspapers, root vegetables } #SUP: 113
+{ whole milk, other vegetables, butter } #SUP: 113
+{ yogurt, other vegetables, rolls/buns } #SUP: 113
+{ whole milk, ham } #SUP: 113
+{ tropical fruit, domestic eggs } #SUP: 112
+{ canned beer, shopping bags } #SUP: 112
+{ cling film/bags } #SUP: 112
+{ bottled water, newspapers } #SUP: 111
+{ frankfurter, soda } #SUP: 111
+{ rolls/buns, canned beer } #SUP: 111
+{ citrus fruit, sausage } #SUP: 111
+{ whole milk, oil } #SUP: 111
+{ rolls/buns, pork } #SUP: 111
+{ spread cheese } #SUP: 110
+{ yogurt, frankfurter } #SUP: 110
+{ whole milk, salty snack } #SUP: 110
+{ liquor } #SUP: 109
+{ margarine, root vegetables } #SUP: 109
+{ coffee, rolls/buns } #SUP: 108
+{ tropical fruit, whole milk, rolls/buns } #SUP: 108
+{ pastry, root vegetables } #SUP: 108
+{ bottled water, shopping bags } #SUP: 108
+{ curd, root vegetables } #SUP: 107
+{ citrus fruit, whipped/sour cream } #SUP: 107
+{ chicken, root vegetables } #SUP: 107
+{ yogurt, whole milk, whipped/sour cream } #SUP: 107
+{ whole milk, other vegetables, bottled water } #SUP: 106
+{ pip fruit, sausage } #SUP: 106
+{ other vegetables, sugar } #SUP: 106
+{ whole milk, sliced cheese } #SUP: 106
+{ canned vegetables } #SUP: 106
+{ frozen dessert } #SUP: 106
+{ other vegetables, salty snack } #SUP: 106
+{ salt } #SUP: 106
+{ sausage, brown bread } #SUP: 105
+{ pip fruit, pastry } #SUP: 105
+{ other vegetables, long life bakery product } #SUP: 105
+{ tropical fruit, brown bread } #SUP: 105
+{ fruit/vegetable juice, shopping bags } #SUP: 105
+{ pip fruit, bottled water } #SUP: 104
+{ whole milk, other vegetables, pastry } #SUP: 104
+{ yogurt, berries } #SUP: 104
+{ whole milk, other vegetables, fruit/vegetable juice } #SUP: 103
+{ dish cleaner } #SUP: 103
+{ yogurt, whole milk, soda } #SUP: 103
+{ curd, whipped/sour cream } #SUP: 103
+{ citrus fruit, other vegetables, root vegetables } #SUP: 102
+{ other vegetables, butter milk } #SUP: 102
+{ citrus fruit, fruit/vegetable juice } #SUP: 102
+{ citrus fruit, domestic eggs } #SUP: 102
+{ flower (seeds) } #SUP: 102
+{ roll products } #SUP: 101
+{ margarine, bottled water } #SUP: 101
+{ white bread, soda } #SUP: 101
+{ other vegetables, berries } #SUP: 101
+{ tropical fruit, curd } #SUP: 101
+{ condensed milk } #SUP: 101
+{ citrus fruit, yogurt, whole milk } #SUP: 101
+{ whole milk, other vegetables, pork } #SUP: 100
+{ frankfurter, root vegetables } #SUP: 100
+{ whole milk, other vegetables, sausage } #SUP: 100
+{ root vegetables, brown bread } #SUP: 100
+{ margarine, soda } #SUP: 100
+{ butter, whipped/sour cream } #SUP: 100
+{ yogurt, other vegetables, whipped/sour cream } #SUP: 100
+{ rolls/buns, frozen vegetables } #SUP: 100
+{ frankfurter, sausage } #SUP: 99
+{ yogurt, whole milk, curd } #SUP: 99
+{ fruit/vegetable juice, sausage } #SUP: 99
+{ whole milk, hard cheese } #SUP: 99
+{ rolls/buns, curd } #SUP: 99
+{ other vegetables, waffles } #SUP: 99
+{ tropical fruit, napkins } #SUP: 99
