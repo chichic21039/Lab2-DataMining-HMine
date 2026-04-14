@@ -339,7 +339,7 @@ end
 # MAIN
 # =========================
 function run_full_benchmarks()
-    isdir("docs") || mkpath("docs")
+    isdir("data/benchmark") || mkpath("data/benchmark")
 
     configs = Dict(
         "mushrooms.txt"   => [60, 55, 50, 45, 40],
@@ -350,7 +350,7 @@ function run_full_benchmarks()
 
     println(">>> RUN BENCHMARK")
 
-    open("docs/benchmark_results.csv", "w") do io
+    open("data/benchmark/benchmark_results.csv", "w") do io
         println(io, "Dataset,Minsup,Version,Time_ms,Peak_RAM_MB,Correctness,Pattern_Count")
 
         for (file, msups) in configs
@@ -406,7 +406,7 @@ function run_full_benchmarks()
     percentages = [10, 25, 50, 75, 100]
     fixed_minsup = 80
 
-    open("docs/scalability_results.csv", "w") do io
+    open("data/benchmark/scalability_results.csv", "w") do io
         println(io, "Percentage,Size_lines,Time_ms,Peak_RAM_MB")
 
         for p in percentages
@@ -437,7 +437,7 @@ function run_full_benchmarks()
     trans_lengths = [5, 10, 15, 20, 25]
     fixed_minsup = 5.0
 
-    open("docs/avg_transaction_length_results.csv", "w") do io
+    open("data/benchmark/avg_transaction_length_results.csv", "w") do io
         println(io, "Avg_Transaction_Length,Time_ms,Peak_RAM_MB,Pattern_Count")
 
         for len_t in trans_lengths
