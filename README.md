@@ -12,7 +12,7 @@ Lab2-DataMining-HMine/
 │   ├── groceries/          # Dữ liệu thực tế và kết quả Phân tích giỏ hàng
 │   ├── toy/                # Dữ liệu nhỏ dùng cho kiểm thử
 │   └── spmf.jar            # Thư viện SPMF dùng để đối chiếu tính đúng đắn
-├── docs/                   # Kết quả đo đạt
+├── docs/                   # report
 ├── notebooks/
 │   ├── demo_market_basket_groceries.ipynb    # Notebook phân tích trực quan Chương 5
 │   └── demo.ipynb                            # Notebook demo thuật toán H-Mine
