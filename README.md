@@ -59,7 +59,7 @@ julia --project=. tests/test_correctness.jl
 ```
 
 **Kiểm thử Benchmark hệ thống:**
-Kiểm thử bộ nhớ RAM cấp phát, đếm tốc độ Garbage Collector, thời gian tổng hợp...
+Đánh giá hiệu năng hệ thống (Time & Peak Memory).
 ```bash
 julia --project=. tests/test_benchmark.jl
 ```
