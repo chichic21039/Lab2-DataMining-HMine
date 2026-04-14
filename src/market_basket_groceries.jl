@@ -1,19 +1,3 @@
-# src/market_basket_groceries.jl
-#
-# Chương 5 — Ứng dụng thực tế: Phân tích giỏ hàng (Market Basket Analysis)
-# Tập dữ liệu: Groceries (data/groceries.txt)
-#   9835 giao dịch, 169 loại sản phẩm
-#
-# Mục tiêu:
-#   1. Đọc dữ liệu groceries (CSV: mỗi dòng = 1 giao dịch, item cách nhau bằng dấu phẩy)
-#   2. Chạy H-Mine để khai phá frequent itemsets
-#   3. Sinh association rules với conf >= minconf
-#   4. Hiển thị top-10 luật theo lift và giải thích ý nghĩa kinh doanh
-#
-# Cách chạy:
-#   julia --project=. src/market_basket_groceries.jl
-#   julia --project=. src/market_basket_groceries.jl data/groceries/groceries.txt 1.0 0.2 10
-
 using Printf
 
 # 0. LOAD CÁC MODULE NỘI BỘ

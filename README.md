@@ -143,6 +143,8 @@ Sau khi tải về, chép các file vào thư mục `data/benchmark/` theo đún
 - `retail.txt`
 - `accidents.txt`
 - `T10I4D100K.txt`
+
+Chép file dưới đây vào thư mục `data`:
 - `spmf.jar`
 
 Nếu có dữ liệu cho phần ứng dụng thực tế, chép `groceries.txt` vào `data/groceries/`.
