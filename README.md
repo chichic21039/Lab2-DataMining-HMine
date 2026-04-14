@@ -129,3 +129,26 @@ Kết quả xuất chi tiết sau quá trình khởi chạy thành công sẽ đ
 1. Bạn hãy mở file `notebooks/demo_market_basket_groceries.ipynb` trong công cụ VS Code.
 2. Tại vị trí góc cao bên tay phải thanh công cụ của tệp, chuyển đổi loại **Kernel** sang ngôn ngữ lập trình **Julia**.
 3. Tiến hành chạy tuần tự các ô lập trình bằng lệnh `Run All` để có thể nhận định tường minh về sự tương quan của 4 chỉ số sinh luật kết hợp gồm: **Support, Confidence, Lift, Conviction**.
+
+# Link drive các file data lớn
+## Google Drive cho dữ liệu benchmark
+
+Do dung lượng dữ liệu benchmark lớn, các file dữ liệu gốc được đặt tại:
+
+**Google Drive:**  
+`https://drive.google.com/drive/folders/1qZ_44p1gAUpVJoBmsV_XikBs9mJI-Azb?usp=sharing`
+
+Sau khi tải về, chép các file vào thư mục `data/benchmark/` theo đúng tên gốc:
+- `mushrooms.txt`
+- `retail.txt`
+- `accidents.txt`
+- `T10I4D100K.txt`
+- `spmf.jar`
+
+Nếu có dữ liệu cho phần ứng dụng thực tế, chép `groceries.txt` vào `data/groceries/`.
+
+
+## **Các file kết quả chạy lần cuối**:
+- Chạy đo lường kết quả: benchmark các file avg_transaction_length_results.csv, scalability_results.csv, benchmark_results.csv trong data/benchmark
+- Chạy lấy kết quả cụ thể
+- Chạy kiểm thử unit test kiểm tra tính đúng đắn: output của cell chạy file runtests.jl trong notebooks/demo.ipynb, mục 5. Chạy bộ kiểm thử tính đúng đắn
