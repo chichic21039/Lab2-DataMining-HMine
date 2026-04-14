@@ -3,6 +3,38 @@
 Dự án này triển khai thuật toán **H-Mine** (bao gồm bản cơ bản và bản tối ưu hóa) bằng ngôn ngữ lập trình **Julia**. Dự án cung cấp mã nguồn để kiểm thử tính đúng đắn (so khớp với SPMF), đánh giá hiệu năng (benchmark) và ứng dụng mạnh mẽ vào bài toán thực tế **Market Basket Analysis** (Phân tích Giỏ hàng) ở Chương 5.
 
 
+## Cấu trúc dự án (Project Structure)
+
+```text
+Lab2-DataMining-HMine/
+├── data/
+│   ├── benchmark/          # Các bộ dữ liệu mẫu (mushrooms,...) để đo hiệu năng
+│   ├── groceries/          # Dữ liệu thực tế và kết quả Phân tích giỏ hàng
+│   ├── toy/                # Dữ liệu nhỏ dùng cho kiểm thử
+│   └── spmf.jar            # Thư viện SPMF dùng để đối chiếu tính đúng đắn
+├── docs/                   # Kết quả đo đạt
+├── notebooks/
+│   ├── demo_market_basket_groceries.ipynb    # Notebook phân tích trực quan Chương 5
+│   └── demo.ipynb                            # Notebook demo thuật toán H-Mine
+├── src/
+│   ├── algorithm/          
+│   │   ├── hmine.jl        # Thuật toán H-Mine phiên bản cơ bản
+│   │   ├── hmine_optimized.jl # Thuật toán H-Mine phiên bản tối ưu hóa hiệu năng
+│   │   └── rules.jl        # Sinh luật kết hợp 
+│   ├── main.jl             # File thực thi chính
+│   ├── market_basket_groceries.jl # Script thực thi riêng cho bài toán Chương 5
+│   ├── structures.jl       # Định nghĩa các cấu trúc dữ liệu (H-struct, Header Table)
+│   └── utils.jl            # Các hàm bổ trợ xử lý I/O và chuyển đổi dữ liệu
+├── tests/
+│   ├── runtests.jl         # File entry kích hoạt toàn bộ hệ thống test
+│   ├── test_correctness.jl # Kiểm thử tự động so khớp kết quả với chuẩn SPMF
+│   └── test_benchmark.jl   # Script đo lường hiệu năng (Time & Memory Usage)
+├── Manifest.toml           # Chi tiết các phiên bản thư viện đã cài đặt (khóa phiên bản)
+├── Project.toml            # Quản lý danh sách thư viện phụ thuộc
+└── README.md               # Tài liệu hướng dẫn dự án
+```
+
+
 ## Yêu cầu hệ thống và Cài đặt
 
 Để chạy mã nguồn và các file Notebook trong dự án một cách trơn tru, máy tính của bạn cần thiết lập cấu hình môi trường Julia.
